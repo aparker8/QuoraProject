@@ -9,6 +9,9 @@ class MyJSONEncoder(JSONEncoder):
         if isinstance(obj,Question):
             return {"question":obj.question,
             "timePosted":obj.timePosted}
+        elif isinstance(obj, Answer):
+            return {"answer": obj.answer,
+            "timePosted":obj.timePosted}
         else:
             return super(MyJSONEncoder, self).default(obj)
 
@@ -31,8 +34,11 @@ def hello():
 @app.route("/questions")
 def getQuestions():
 
-
     return jsonify(questions)
+
+@app.route("/answers/<int:questionID>")
+def getAnswers(questionID):
+    return jsonify(questions[questionID].answers)
 
 
 if __name__ == '__main__':
