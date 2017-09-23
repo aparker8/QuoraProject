@@ -1,9 +1,19 @@
 from flask import Flask, request, jsonify
+from flask.json import JSONEncoder
 
 from question import Question
 from answer import Answer
 
+class MyJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj,Question):
+            return {"question":obj.question,
+            "timePosted":obj.timePosted}
+        else:
+            return super(MyJSONEncoder, self).defaut(obj)
+
 app = Flask(__name__)
+app.json_encoder = MyJSONEncoder
 
 questions = []
 
@@ -17,16 +27,8 @@ def hello():
 @app.route("/questions")
 def getQuestions():
 
-    response = {}
 
-    for i, question in enumerate(questions):
-        response[i] = {
-
-        "question": question.question,
-        "timePosted": question.timePosted
-        }
-
-    return jsonify(response)
+    return jsonify(questions)
 
 
 if __name__ == '__main__':
