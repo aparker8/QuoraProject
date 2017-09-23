@@ -10,12 +10,16 @@ class MyJSONEncoder(JSONEncoder):
             return {"question":obj.question,
             "timePosted":obj.timePosted}
         else:
-            return super(MyJSONEncoder, self).defaut(obj)
+            return super(MyJSONEncoder, self).default(obj)
 
 app = Flask(__name__)
 app.json_encoder = MyJSONEncoder
 
-questions = []
+q = Question("Who dis?")
+q.addAnswer("A-a-ron")
+
+
+questions = [q]
 
 @app.route("/question", methods = ['POST'])
 def hello():
