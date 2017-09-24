@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort, render_template
 from flask.json import JSONEncoder
 
 from question import Question
@@ -40,6 +40,14 @@ def getQuestions():
 def getAnswers(questionID):
     return jsonify(questions[questionID].answers)
 
+@app.route('/<path:path>')
+def get_file(path):
+    if '..' in path or path.startswith("/"):
+        abort(404)
+    try:
+        return app.send_static_file(path)
+    except:
+        return render_template(path, questions = questions)
 
 if __name__ == '__main__':
     app.run()
